@@ -1,7 +1,56 @@
 - hosts: all
+  vars_files:
+    - ansible_variables.yaml
   tasks:
-    - name: run this command and ignore the result
-      shell: "echo running remove exec. I am: $('hostname')"
-      ignore_errors: True
-      register: hello
-    - debug: msg="{{ hello.stdout }}"
+  - name: Copy provisioning host script
+    copy:
+      src: '{{item}}'
+      dest: /home/ubuntu/scripts/
+      mode: +x
+    loop:
+      - scripts/provision_host.sh
+  - name: Execute the provisioning script
+    become: yes
+    shell: /home/ubuntu/scripts/provision_host.sh
+    register: provision_host_script
+  - name: Copy user skel scripts
+    become: yes
+    copy:
+      src: '{{item}}'
+      dest: /etc/skel/
+      owner: root
+      group: root
+      mode: +x
+    loop:
+      - scripts/skel/enterScriptInputs.sh
+  - name: Copy user skel files
+    become: yes
+    copy:
+      src: '{{item}}'
+      dest: /etc/skel/
+      owner: root
+      group: root
+    loop:
+      - scripts/skel/creds.template
+  - name: copy shellinabox config
+    become: yes
+    copy:
+      src: scripts/shellinabox
+      dest: /etc/default/shellinabox
+      owner: root
+      group: root
+  - name: restart shellinabox
+    become: yes
+    service: 
+      name: shellinabox 
+      state: restarted
+  - name: create user for shellinabox and ignore if exists
+    user:
+      name: "{{ user }}"
+  - name: reset password
+    become: yes
+    command: echo "{{ user }}:{{ password }}" | chpasswd
+  - name: add user to sudo group
+    become: yes
+    command: usermod -a -G sudo "{{ user }}"
+  #- debug: msg="{{ provision_host_script.stdout }}"

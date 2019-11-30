@@ -1,12 +1,14 @@
 #Terraform main config file
 provider "aws" {
-    region                  = var.aws_region
-    profile                 = var.aws_creds_profile
-    shared_credentials_file = var.aws_creds_file
+  region                  = var.aws_region
+  profile                 = var.aws_creds_profile
+  shared_credentials_file = var.aws_creds_file
 }
 
 resource "aws_vpc" "vpc" {
   cidr_block = var.aws_vpc_cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
     Name = var.aws_tag_name
@@ -68,7 +70,12 @@ resource "aws_security_group" "app_sg" {
           protocol        = "tcp"
           cidr_blocks     = ["0.0.0.0/0"]
   }
-
+  ingress {  #shell in a box port
+          from_port       = 4200
+          to_port         = 4200
+          protocol        = "tcp"
+          cidr_blocks     = ["0.0.0.0/0"]
+  }
   egress  {  #Outbound all allow
           from_port       = 0
           to_port         = 0
@@ -92,7 +99,7 @@ resource "aws_instance" "app_vm" {
   tags = {
       Name = var.aws_tag_name
   }
-      
+
   /*
   provisioner "remote-exec" {
       inline = ["echo running remove exec. I am:  $('hostname')"]

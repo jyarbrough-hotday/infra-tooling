@@ -2,3 +2,5 @@
 *.pem
 terraform.tfstate*
 notes
+creds.json
+creds.json.bak

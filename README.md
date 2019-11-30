@@ -24,13 +24,16 @@ The following must be installed on laptop/server where developing/lauching the r
     # on mac
     brew install terraform
     ```
-1. install ansible
+1. ansible
     ```
     # on mac
     pip3 install ansible
     # verify
     ansible localhost -m ping 
     ```
+1. AWS account with admin access to create resources
+1. AWS KeyPair file
+1. clone this repo. NOTE local Terraform init and state files are excluded in ```.gitignore``` file
 
 # Terrform
 1. Update ```variables.tf``` values for:
@@ -44,7 +47,7 @@ The following must be installed on laptop/server where developing/lauching the r
     terraform init
     terraform apply
     ```
-1. terraform will output the public IP that can be used in an ssh connection
+1. After making the VM, terraform will output the public IP that can be used in the ssh connection
     ```
     Outputs:
 
@@ -55,11 +58,11 @@ The following must be installed on laptop/server where developing/lauching the r
     ssh -i "jahn-dt-aws.pem" ubuntu@111.222.333.444
     ``` 
 
-# Ansible Playbook - Using Dynamic Inventory
+# Run Ansible Playbook - Using Dynamic Inventory
 1. You may need to adjust ```ec2.py``` python interpreter line
     ```
     #!/usr/local/bin/python3   <-- I did this for macOS
-    #!/usr/bin/env python <-- this is the original values in script
+    #!/usr/bin/env python      <-- this is the original values in script
     ```
 1. **THIS IS IMPORTANT, OTHERWISE RISK RUNNING PLAYBOOK ON WRONG HOSTS**. Adjust ```ec2.ini``` the filters as required, for example:
    * instance_filters = tag:Name=jahn
@@ -67,6 +70,8 @@ The following must be installed on laptop/server where developing/lauching the r
 1. Test dynamic inventory with this command
     ```
     ./ec2.py --list
+    # on mac if don't have a python alias setup
+    python3 ec2.py --list
     ```
 1. run playbook
     ```
