@@ -19,7 +19,7 @@ The following must be installed on laptop/server where developing/lauching the r
 1. python3 
 1. pip3
 1. awscli
-1. terraform
+1. terraform v0.12
     ```
     # on mac
     brew install terraform
@@ -44,6 +44,16 @@ The following must be installed on laptop/server where developing/lauching the r
     terraform init
     terraform apply
     ```
+1. terraform will output the public IP that can be used in an ssh connection
+    ```
+    Outputs:
+
+    public_ip = [
+    "111.222.333.444",
+    ]
+
+    ssh -i "jahn-dt-aws.pem" ubuntu@111.222.333.444
+    ``` 
 
 # Ansible Playbook - Using Dynamic Inventory
 1. You may need to adjust ```ec2.py``` python interpreter line
