@@ -45,8 +45,10 @@
       name: shellinabox 
       state: restarted
   - name: create user for shellinabox and ignore if exists
+    become: yes
     user:
       name: "{{ user }}"
+      password: "{{ password }}"
   - name: reset password
     become: yes
     command: echo "{{ user }}:{{ password }}" | chpasswd

@@ -1,6 +1,6 @@
 ##### Adjust these
 variable "aws_tag_name" {
-  default = "jahn"
+  default = "jyarbrough"
 }
 
 variable "aws_region" {
@@ -15,16 +15,16 @@ variable "aws_creds_profile" {
   default = "default"
 }
 variable "aws_keypair_name" {
-  default = "jahn-dt-aws"
+  default = "DevOps"
 }
 
 variable "aws_pem_file" {
-  default = "/Users/rob.jahn/dev/jahn-dt-aws.pem"
+  default = "/Users/jeffery.yarbrough/Documents/Dynatrace/AWS-EKS/DevOps.pem"
 }
 
 ###### leave these as is
 variable "server_instance_type" {
-  default         = "t2.micro"
+  default         = "t2.medium"
 }
 variable "server_ami" {
   default         = "ami-04763b3055de4860b"
