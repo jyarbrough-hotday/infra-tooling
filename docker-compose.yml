@@ -1,0 +1,38 @@
+customer-service:
+  hostname: customer-service
+  container_name: customer
+  image: robjahn/keptn-orders-customer-service:1
+  ports:
+  - 8083
+  - 8080
+
+catalog-service:
+  hostname: catalog-service
+  container_name: catalog
+  image: robjahn/keptn-orders-catalog-service:1
+  ports:
+  - 8082
+  - 8080
+
+order-service:
+  hostname: order-service
+  container_name: order
+  image: robjahn/keptn-orders-order-service:1
+  ports:
+  - 8081
+  - 8080
+  links:
+  - catalog-service
+  - customer-service
+
+front-end:
+  hostname: front-end
+  container_name: frontend
+  image: robjahn/keptn-orders-front-end:1
+  ports:
+  - 8080
+  - 80
+  links:
+  - order-service
+  - catalog-service
+  - customer-service
